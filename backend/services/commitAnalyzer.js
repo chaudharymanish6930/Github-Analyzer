@@ -1,32 +1,15 @@
-const { analyzeWithAI } = require("./aiAnalyzer");
-
-const analyzeCommits = async (commits) => {
+const analyzeCommits = (commits) => {
   let good = 0;
   let bad = 0;
 
-  for (let c of commits) {
-    const msg = c.commit.message;
+  commits.forEach(c => {
+    const msg = c.commit.message.toLowerCase();
 
-    // 🔥 small filter (fast)
-    if (msg.length < 5) {
-      bad++;
-      continue;
-    }
+    if (msg.length > 15) good++;
+    else bad++;
+  });
 
-    const result = await analyzeWithAI(msg);
-
-    if (result.toLowerCase().includes("good")) {
-      good++;
-    } else {
-      bad++;
-    }
-  }
-
-  return {
-    good,
-    bad,
-    total: commits.length
-  };
+  return { good, bad, total: commits.length };
 };
 
 module.exports = { analyzeCommits };

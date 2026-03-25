@@ -9,7 +9,7 @@ const analyzeProfile = async (req, res) => {
 
     let allCommits = [];
 
-    // 🔥 sirf 3 repos (limit avoid karne ke liye)
+    // sirf 3 repos
     for (let i = 0; i < Math.min(3, data.repos.length); i++) {
       const repo = data.repos[i];
       const commits = await getRepoCommits(username, repo.name);
@@ -30,5 +30,3 @@ const analyzeProfile = async (req, res) => {
 };
 
 module.exports = { analyzeProfile };
-
-const result = await analyzeCommits(allCommits);
