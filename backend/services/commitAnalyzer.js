@@ -1,13 +1,32 @@
-const analyzeCommits = (repos) => {
-  let score = 0;
+const { analyzeWithAI } = require("./aiAnalyzer");
 
-  repos.forEach(repo => {
-    if (repo.stargazers_count > 5) score += 10;
-    if (repo.forks_count > 2) score += 5;
-    if (repo.description) score += 5;
-  });
+const analyzeCommits = async (commits) => {
+  let good = 0;
+  let bad = 0;
 
-  return score;
+  for (let c of commits) {
+    const msg = c.commit.message;
+
+    // 🔥 small filter (fast)
+    if (msg.length < 5) {
+      bad++;
+      continue;
+    }
+
+    const result = await analyzeWithAI(msg);
+
+    if (result.toLowerCase().includes("good")) {
+      good++;
+    } else {
+      bad++;
+    }
+  }
+
+  return {
+    good,
+    bad,
+    total: commits.length
+  };
 };
 
 module.exports = { analyzeCommits };

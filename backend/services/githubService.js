@@ -6,8 +6,17 @@ const getUserData = async (username) => {
 
   return {
     user: user.data,
-    repos: repos.data,
+    repos: repos.data
   };
 };
 
-module.exports = { getUserData };
+// 🔥 NEW FUNCTION
+const getRepoCommits = async (username, repoName) => {
+  const commits = await axios.get(
+    `https://api.github.com/repos/${username}/${repoName}/commits`
+  );
+
+  return commits.data;
+};
+
+module.exports = { getUserData, getRepoCommits };
