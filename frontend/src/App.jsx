@@ -3,6 +3,9 @@ import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from 'recharts';
 import './App.css';
 
+// Live Render Backend URL
+const API_BASE_URL = 'https://github-analyzer-zz5r.onrender.com';
+
 function App() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'search', 'compare'
@@ -31,7 +34,7 @@ function App() {
 
   // Check logged-in user on mount
   useEffect(() => {
-    axios.get('http://localhost:5000/api/current-user', { withCredentials: true })
+    axios.get(`${API_BASE_URL}/api/current-user`, { withCredentials: true })
       .then(res => {
         if (res.data.success && res.data.user) {
           const loggedInUser = res.data.user;
@@ -45,7 +48,7 @@ function App() {
   const fetchDeepAnalysis = async (username, setDataFunc, setLoadingFunc) => {
     setLoadingFunc(true);
     try {
-      const response = await axios.get(`http://localhost:5000/api/github/${username.toLowerCase()}/deep-analysis`);
+      const response = await axios.get(`${API_BASE_URL}/api/github/${username.toLowerCase()}/deep-analysis`);
       setDataFunc(response.data.data);
     } catch (err) {
       console.error("Deep analysis fetch error", err);
@@ -55,11 +58,11 @@ function App() {
   };
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/github';
+    window.location.href = `${API_BASE_URL}/auth/github`;
   };
 
   const handleLogout = () => {
-    window.location.href = 'http://localhost:5000/auth/logout';
+    window.location.href = `${API_BASE_URL}/auth/logout`;
   };
 
   // Guest Search Handler
@@ -72,7 +75,7 @@ function App() {
     setGuestProfile(null);
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/github/${searchQuery.trim().toLowerCase()}`);
+      const response = await axios.get(`${API_BASE_URL}/api/github/${searchQuery.trim().toLowerCase()}`);
       setGuestProfile(response.data.data);
     } catch (err) {
       setError(err.response?.data?.message || 'GitHub user nahi mila!');
@@ -101,8 +104,8 @@ function App() {
 
     try {
       const [res1, res2] = await Promise.all([
-        axios.get(`http://localhost:5000/api/github/${compareUser1.trim().toLowerCase()}/deep-analysis`),
-        axios.get(`http://localhost:5000/api/github/${compareUser2.trim().toLowerCase()}/deep-analysis`)
+        axios.get(`${API_BASE_URL}/api/github/${compareUser1.trim().toLowerCase()}/deep-analysis`),
+        axios.get(`${API_BASE_URL}/api/github/${compareUser2.trim().toLowerCase()}/deep-analysis`)
       ]);
 
       const u1 = res1.data.data;
@@ -118,7 +121,6 @@ function App() {
       u2.primaryLanguage = getTopLanguage(u2.languages);
 
       // Smart Weighted Verdict Calculation
-      // Score considers Authenticity + Real Commits activity
       const score1 = (u1.totalRealCommits > 0 ? u1.overallAuthenticityScore : 0) + (u1.totalRealCommits * 0.5);
       const score2 = (u2.totalRealCommits > 0 ? u2.overallAuthenticityScore : 0) + (u2.totalRealCommits * 0.5);
 
