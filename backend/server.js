@@ -30,7 +30,8 @@ app.use(passport.session());
 app.use(cors({
     origin: [
     'https://github-analyzer-ashy.vercel.app', 
-    'http://localhost:5173'
+    'http://localhost:5173',
+    'http://localhost:3000'
   ],
     credentials: true
 }));
