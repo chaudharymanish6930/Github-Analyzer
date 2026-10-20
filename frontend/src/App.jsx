@@ -4,7 +4,10 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 import './App.css';
 
 // Live Render Backend URL
-const API_BASE_URL = 'https://github-analyzer-zz5r.onrender.com';
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000' 
+  : 'https://github-analyzer-zz5r.onrender.com';
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -33,17 +36,42 @@ function App() {
   const [compareLoading, setCompareLoading] = useState(false);
 
   // Check logged-in user on mount
-  useEffect(() => {
-    axios.get(`${API_BASE_URL}/api/current-user`, { withCredentials: true })
+  // useEffect(() => {
+  //   axios.get(`${API_BASE_URL}/api/current-user`, { withCredentials: true })
+  //     .then(res => {
+  //       if (res.data.success && res.data.user) {
+  //         const loggedInUser = res.data.user;
+  //         setUser(loggedInUser);
+  //         fetchDeepAnalysis(loggedInUser.username, setMyDeepData, setMyLoading);
+  //       }
+  //     })
+  //     .catch(err => console.log("Guest mode active"));
+  // }, []);
+
+
+   useEffect(() => {
+
+    axios.get('http://localhost:5000/api/current-user', { withCredentials: true })
+
       .then(res => {
+
         if (res.data.success && res.data.user) {
+
           const loggedInUser = res.data.user;
+
           setUser(loggedInUser);
+
           fetchDeepAnalysis(loggedInUser.username, setMyDeepData, setMyLoading);
+
         }
+
       })
+
       .catch(err => console.log("Guest mode active"));
+
   }, []);
+
+
 
   const fetchDeepAnalysis = async (username, setDataFunc, setLoadingFunc) => {
     setLoadingFunc(true);
