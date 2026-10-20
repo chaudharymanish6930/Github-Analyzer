@@ -71,7 +71,7 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/github/callback"
+    callbackURL: process.env.CALLBACK_URL || "http://localhost:5000/auth/github/callback"
   },
   async function(accessToken, refreshToken, profile, done) {
     try {
@@ -101,9 +101,11 @@ passport.use(new GitHubStrategy({
 app.get('/auth/github', passport.authenticate('github', { scope: ['user:email'] }));
 
 app.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: 'http://localhost:5173' }),
+  passport.authenticate('github', { failureRedirect: '/' }),
   function(req, res) {
-    res.redirect('http://localhost:5173');
+    // Client URL env variable se uthayega
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    res.redirect(clientUrl);
   }
 );
 
