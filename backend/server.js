@@ -10,7 +10,7 @@ require('dotenv').config();
 console.log("GitHub Token Status:", process.env.GITHUB_TOKEN ? "Token Loaded Successfully ✅" : "Token Missing ❌");
 
 const app = express();
-
+app.set('trust proxy', 1);
 // Session Middleware
 app.use(session({
     secret: process.env.SESSION_SECRET || 'mysecretkey',
