@@ -6,7 +6,7 @@ import './App.css';
 // Live Render Backend URL (Dynamic)
 const API_BASE_URL = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000' 
-  : 'https://github-analyzer-zz5r.onrender.com';
+  : 'https://github-analyzer-ashy.vercel.app/auth/github/callback';
 
 function App() {
   const [user, setUser] = useState(null);
