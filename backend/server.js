@@ -18,6 +18,10 @@ console.log('Environment:', isProd ? 'production' : 'development');
 const app = express();
 app.set('trust proxy', 1); // Render proxy ke peeche hai
 
+app.get('/ping', (req, res) => {
+  res.status(200).send('Server is alive!');
+});
+
 // ================= 1. CORS (sabse pehle) =================
 const allowedOrigins = [
   CLIENT_URL,
