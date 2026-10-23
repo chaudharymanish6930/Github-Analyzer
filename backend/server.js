@@ -6,7 +6,7 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const session = require('express-session');
 const connectMongo = require('connect-mongo');
-const MongoStore = connectMongo.MongoStore || connectMongo.default || connectMongo;
+const MongoStore = connectMongo.MongoStore || connectMongo.default || connectMongo; // v5 aur v6 dono pe chalega
 require('dotenv').config();
 
 const isProd = process.env.NODE_ENV === 'production';
