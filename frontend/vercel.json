@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "https://github-analyzer-zz5r.onrender.com/api/:path*" },
+    { "source": "/auth/:path*", "destination": "https://github-analyzer-zz5r.onrender.com/auth/:path*" },
+    { "source": "/((?!api|auth).*)", "destination": "/index.html" }
+  ]
+}
